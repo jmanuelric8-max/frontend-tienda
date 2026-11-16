@@ -44,7 +44,18 @@ export default function Home() {
         id: Number(linea.producto_id),
         detalleId: Number(linea.detalle_id),
         nombre: linea.nombre,
-        imagen: linea.imagen,
+        // Priorizar la URL de Cloudinary. Mantener compatibilidad
+        // con el nombre de archivo antiguo alojado en Render.
+        imagen:
+          linea.imagen_url ||
+          producto?.imagen_url ||
+          linea.imagen ||
+          producto?.imagen ||
+          "",
+        imagen_url:
+          linea.imagen_url ||
+          producto?.imagen_url ||
+          "",
         precio: Number(linea.precio_unitario),
         cantidad: Number(linea.cantidad),
       };
@@ -417,9 +428,9 @@ export default function Home() {
                 className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="relative flex h-44 items-center justify-center bg-gray-100">
-                  {producto.imagen ? (
+                  {(producto.imagen_url || producto.imagen) ? (
                     <Image
-                      src={imagenUrl(producto.imagen)}
+                      src={imagenUrl(producto.imagen_url || producto.imagen)}
                       alt={producto.nombre}
                       width={640}
                       height={440}
